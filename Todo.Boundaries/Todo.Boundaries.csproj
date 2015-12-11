@@ -39,8 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITodoRequest.cs" />
-    <Compile Include="ITodoResponse.cs" />
+    <Compile Include="ICreateTodoRequest.cs" />
+    <Compile Include="ICreateTodoResponse.cs" />
+    <Compile Include="IDeleteTodoRequest.cs" />
+    <Compile Include="IDeleteTodoResponse.cs" />
+    <Compile Include="IReadTodoRequest.cs" />
+    <Compile Include="IReadTodoResponse.cs" />
+    <Compile Include="IUpdateTodoRequest.cs" />
+    <Compile Include="IUpdateTodoResponse.cs" />
+    <Compile Include="Models\TodoRequest.cs" />
+    <Compile Include="Models\TodoResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

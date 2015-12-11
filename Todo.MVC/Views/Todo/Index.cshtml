@@ -15,16 +15,8 @@
         <h3>@Model.HeaderText</h3>
         @using (Html.BeginForm("Create", "Todo", FormMethod.Post))
         {
-            if (Model.TodoItem != null && Model.TodoItem.ID == 0)
-            {
-                @Html.ValidationMessage("Description")
-                <br />
-                @Html.TextBox("Description", Model.TodoItem.Description, new { placeholder = "description" })
-            }
-            else
-            {
-                @Html.TextBox("Description", null, new { placeholder = "description" })
-            }
+            <div>@Html.ValidationMessage("Description")</div>
+            @Html.TextBox("Description", Model.TodoItem.Description, new { placeholder = "description" })
 
             <input type="submit" value="add" />
         }
@@ -39,9 +31,9 @@
                             @Html.Hidden("ID", todoItem.ID)
                             @Html.Hidden("Description", todoItem.Description)
                             @Html.CheckBox("Completed", todoItem.Completed, new
-                        {
-                            onclick = "this.form.submit();"
-                        })
+                            {
+                                onclick = "this.form.submit();"
+                            })
                         }
                     </td>
                     @if (Model.TodoItem != null && Model.TodoItem.ID == todoItem.ID)

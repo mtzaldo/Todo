@@ -1,35 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Todo.Interactors
 {
-    public class DeleteTodo
+    public class DeleteTodo : Boundaries.IDeleteTodoRequest
     {
-        Boundaries.ITodoResponse _response = null;
-        EntitiesGateway.ITodoRepository _repository = null;
+        Boundaries.IDeleteTodoResponse _resp = null;
+        EntitiesGateway.ITodoRepository _repo = null;
 
         public DeleteTodo(
-            Boundaries.ITodoResponse resp,
+            Boundaries.IDeleteTodoResponse resp,
             EntitiesGateway.ITodoRepository repo)
         {
-            _repository = repo;
-            _response = resp;
+            _repo = repo;
+            _resp = resp;
         }
 
-        public bool Remove(Boundaries.ITodoRequest todo)
+        public void Delete(Boundaries.Models.TodoRequest req)
         {
             try
             {
-                if (todo.ID > 0)
-                    _repository.DeleteById(todo.ID);
+                if (req.ID > 0)
+                    _repo.DeleteById(req.ID);
+
+                _resp.Response(new Events.OperationResultEventArgs(true, "delete", "deleted todo #id " + req.ID.ToString()));
             }
             catch
             {
-                throw new Exception("Unable to remote the todo item");
+                throw new Exception("Unable to delete the todo item");
             }
-
-            return true;
         }
     }
 }

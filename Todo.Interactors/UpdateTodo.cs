@@ -1,34 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Todo.Interactors
+﻿namespace Todo.Interactors
 {
-    public class UpdateTodo
+    public class UpdateTodo : Boundaries.IUpdateTodoRequest
     {
-        Boundaries.ITodoResponse _response = null;
+        Boundaries.IUpdateTodoResponse _response = null;
         EntitiesGateway.ITodoRepository _repository = null;
 
         public UpdateTodo(
-            Boundaries.ITodoResponse resp,
+            Boundaries.IUpdateTodoResponse resp,
             EntitiesGateway.ITodoRepository repo)
         {
             _repository = repo;
             _response = resp;
         }
 
-        public void Save(Boundaries.ITodoRequest t)
+        public void Save(Boundaries.Models.TodoRequest req)
         {
-            if (t.ID > 0)
-                _repository.Update(
-                    new Entities.Todo()
-                    {
-                        ID = t.ID,
-                        Description = t.Description,
-                        Completed = t.Completed
-                    });
+            Entities.Todo entity = new Entities.Todo()
+            {
+                ID = req.ID,
+                Description = req.Description,
+                Completed = req.Completed
+            };
+
+            if (entity.ID > 0 && entity.IsValid)
+            {
+                _repository.Update(entity);
+            }
+            else
+            {
+                throw new System.Exception("[update] invalid todo item.");
+            }
+                
         }
     }
 }

@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Todo.MVC.Models
+﻿namespace Todo.Boundaries.Models
 {
-    public class Todo
+    public class TodoResponse
     {
         public int ID { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
         public bool Completed { get; set; }

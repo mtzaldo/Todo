@@ -1,45 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Todo.Boundaries.Models;
 
 namespace Todo.Interactors
 {
-    public class ReadTodos
+    public class ReadTodos : Boundaries.IReadTodoRequest
     {
-        Boundaries.ITodoResponse _response = null;
+        Boundaries.IReadTodoResponse _response = null;
         EntitiesGateway.ITodoRepository _repository = null;
 
         public ReadTodos(
-            Boundaries.ITodoResponse resp,
+            Boundaries.IReadTodoResponse resp,
             EntitiesGateway.ITodoRepository repo)
         {
             _repository = repo;
             _response = resp;
         }
 
-        public List<Boundaries.ITodoRequest> GetItems()
+        public IEnumerable<Boundaries.Models.TodoResponse> Read(TodoRequest req)
         {
             List<Entities.Todo> items = 
                 _repository.SelectAll();
 
-            List<Boundaries.ITodoRequest> todoList = 
-                new List<Boundaries.ITodoRequest>();
+            List<Boundaries.Models.TodoResponse> todoResp =
+                items.Select(t => new Boundaries.Models.TodoResponse() {
+                    ID = t.ID,
+                    Description = t.Description,
+                    Completed = t.Completed
+                }).ToList();
 
-            Boundaries.ITodoRequest todo;
+            _response.Response(new Events.OperationResultEventArgs(true, "read", "read a lot of todos"));
 
-            foreach(var i in items)
-            {
-                todo = new Models.Todo()
-                {
-                    ID = i.ID,
-                    Description = i.Description,
-                    Completed = i.Completed
-                };
+            return todoResp;
 
-                todoList.Add(todo);
-            }
-
-            return todoList;
         }
     }
 }

@@ -45,7 +45,6 @@
     </Compile>
     <Compile Include="ReadTodos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Todo.cs" />
     <Compile Include="UpdateTodo.cs" />
   </ItemGroup>
   <ItemGroup>

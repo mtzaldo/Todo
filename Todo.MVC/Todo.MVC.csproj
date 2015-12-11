@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -101,7 +102,10 @@
     </Compile>
     <Compile Include="Models\Todo.cs" />
     <Compile Include="Models\TodoViewModel.cs" />
-    <Compile Include="Presenters\TodoPresenter.cs" />
+    <Compile Include="Presenters\CreateTodoPresenter.cs" />
+    <Compile Include="Presenters\DeleteTodoPresenter.cs" />
+    <Compile Include="Presenters\IndexTodoPresenter.cs" />
+    <Compile Include="Presenters\UpdateTodoPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

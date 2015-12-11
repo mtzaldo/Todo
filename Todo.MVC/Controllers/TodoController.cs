@@ -1,29 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Todo.MVC.Controllers
 {
     public class TodoController : Controller
     {
-        Presenters.TodoPresenter _p = null;
-        Presenters.TodoPresenter Presenter
-        {
-            get
-            {
-                if (_p == null)
-                    _p = new Presenters.TodoPresenter();
-
-                return _p;
-            }
-        }
 
         public ActionResult Index()
         {
-            Models.TodoViewModel vm =
-                this.Presenter.Intitialize();
+            Presenters.IndexTodoPresenter p =
+                new Presenters.IndexTodoPresenter();
+
+            Models.TodoViewModel vm = p.Init();
 
             return View(vm);
         }
@@ -31,9 +18,17 @@ namespace Todo.MVC.Controllers
         [HttpPost]
         public ActionResult Create(Models.Todo todo)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             try
             {
-                this.Presenter.CreateTodoItem(todo);
+                Presenters.CreateTodoPresenter presenter =
+                    new Presenters.CreateTodoPresenter();
+
+                presenter.CreateTodoItem(todo);
 
                 return RedirectToAction("Index");
             }
@@ -46,8 +41,10 @@ namespace Todo.MVC.Controllers
         // GET: Todo/Edit/5
         public ActionResult Edit(int id)
         {
-            Models.TodoViewModel vm =
-                this.Presenter.Intitialize();
+            Presenters.IndexTodoPresenter p =
+                new Presenters.IndexTodoPresenter();
+
+            Models.TodoViewModel vm = p.Init();
 
             vm.TodoItem = new Models.Todo() { ID = id };
 
@@ -58,22 +55,44 @@ namespace Todo.MVC.Controllers
         [HttpPost]
         public ActionResult Edit(Models.Todo todo)
         {
+            Presenters.IndexTodoPresenter p =
+                new Presenters.IndexTodoPresenter();
+
+            Models.TodoViewModel vm = null;
+
             try
             {
-                this.Presenter.UpdateTodo(todo);
+                if (!ModelState.IsValid)
+                {
+                    vm = p.Init();
+                    vm.TodoItem = todo;
+
+                    return View("Index", vm);
+                }
+
+                Presenters.UpdateTodoPresenter presenter =
+                    new Presenters.UpdateTodoPresenter();
+
+                presenter.Save(todo);
 
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                vm = p.Init();
+                vm.TodoItem = todo;
+
+                return View("Index", vm);
             }
         }
 
         // GET: Todo/Delete/5
         public ActionResult Delete(int id)
         {
-            this.Presenter.DeleteTodo(new Models.Todo() { ID = id });
+            Presenters.DeleteTodoPresenter presenter =
+                new Presenters.DeleteTodoPresenter();
+
+            presenter.DeleteTodo(new Models.Todo() { ID = id });
 
             return RedirectToAction("Index");
         }
