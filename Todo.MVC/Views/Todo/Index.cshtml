@@ -25,22 +25,13 @@
             @foreach (var todoItem in Model.TodoList)
             {
                 <tr>
-                    <td>
-                        @using (@Html.BeginForm("Edit", "Todo", FormMethod.Post))
-                        {
-                            @Html.Hidden("ID", todoItem.ID)
-                            @Html.Hidden("Description", todoItem.Description)
-                            @Html.CheckBox("Completed", todoItem.Completed, new
-                            {
-                                onclick = "this.form.submit();"
-                            })
-                        }
-                    </td>
-                    @if (Model.TodoItem != null && Model.TodoItem.ID == todoItem.ID)
+                    @if (Model.TodoItem.ID == todoItem.ID)
                     {
                         using (Html.BeginForm("Edit", "Todo", FormMethod.Post, new { id = "form-save" }))
                         {
-
+                            <td>
+                                @Html.CheckBox("Completed", todoItem.Completed)
+                            </td>
                             <td>
                                 @Html.Hidden("ID", todoItem.ID)
                                 @Html.Hidden("Completed", todoItem.Completed)
@@ -54,6 +45,25 @@
                     }
                     else
                     {
+                        if (Model.TodoItem.ID > 0)
+                        {
+                            <td>@Html.CheckBox("Completed", todoItem.Completed, new { disabled = "disabled" })</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @using (@Html.BeginForm("Edit", "Todo", FormMethod.Post, new { id = "delete-form-" + todoItem.ID }))
+                                {
+                                    @Html.Hidden("ID", todoItem.ID)
+                                    @Html.Hidden("Description", todoItem.Description)
+                                    @Html.CheckBox("Completed", todoItem.Completed, new
+                                    {
+                                        onclick = "document.getElementById('delete-form-" + todoItem.ID + "').submit();"
+                                    })
+                                }
+                            </td>
+                        }
+
                         <td>@todoItem.Description</td>
                         <td>
                             @Html.ActionLink("edit", "Edit", "Todo", new { id = todoItem.ID }, null)
